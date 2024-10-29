@@ -1,81 +1,58 @@
-const APIURL = "https://api.themoviedb.org/3/discover/movie?sort_by=popularity.desc&api_key=04c35731a5ee918f014970082a0088b1&page=1";
+$(document).ready(() => {
+    $('#hamburger-menu').click(() => {
+        $('#hamburger-menu').toggleClass('active')
+        $('#nav-menu').toggleClass('active')
+    })
 
-const IMGPATH = "https://image.tmdb.org/t/p/w1280";
+    // setting owl carousel
 
-const SEARCHAPI = "https://api.themoviedb.org/3/search/movie?&api_key=04c35731a5ee918f014970082a0088b1&query=";
+    let navText = ["<i class='bx bx-chevron-left'></i>", "<i class='bx bx-chevron-right'></i>"]
 
-// ye HTML WALE TAG
-const main = document.getElementById("main");
-const form = document.getElementById("form");
-const search = document.getElementById("search");
+    $('#hero-carousel').owlCarousel({
+        items: 1,
+        dots: false,
+        loop: true,
+        nav:true,
+        navText: navText,
+        autoplay: true,
+        autoplayHoverPause: true
+    })
 
-///initalyy get fav movies
-getMovies(APIURL);
+    $('#top-movies-slide').owlCarousel({
+        items: 2,
+        dots: false,
+        loop: true,
+        autoplay: true,
+        autoplayHoverPause: true,
+        responsive: {
+            500: {
+                items: 3
+            },
+            1280: {
+                items: 4
+            },
+            1600: {
+                items: 6
+            }
+        }
+    })
 
-async function getMovies(url) {
-  const resp = await fetch(url);
-  const respData = await resp.json();
-
-  // movie aa gyi
-  console.log(respData);
-  // yaha pe show karenge
-  showMovies(respData.results);
-
-}
-
-function showMovies(movies) {
-  //clear main
-  main.innerHTML = "";
-  movies.forEach((movie) => {
-    const { poster_path, title, vote_average, overview } = movie;
-    // raja
-    const movieEl = document.createElement("div");
-    movieEl.classList.add("movie");
-
-
-    movieEl.innerHTML = `
-       <img src="${IMGPATH + poster_path}" alt="${title}"/>
-
-     <div class="movie-info">
-         <h3>${title}</h3>
-         <span class="${getClassByRate(vote_average)}">${vote_average}</span>
-     </div> 
-
-     <div class="overview">
-
-     <h2>Overview:</h2>
-     ${overview}
-     </div>
-     `;
-
-    main.appendChild(movieEl)
-  });
-
-}
-
-
-function getClassByRate(vote) {
-  if (vote >= 8) {
-    return 'green';
-  } else if (vote >= 5) {
-    return 'orange'
-  } else {
-    return 'red';
-  }
-
-}
-
-
-form.addEventListener("submit", (e) => {
-  e.preventDefault();
-
-
-  const searchTerm = search.value;
-
-  if (searchTerm) {
-
-    getMovies(SEARCHAPI + searchTerm);
-
-    search.value = "";
-  }
-});
+    $('.movies-slide').owlCarousel({
+        items: 2,
+        dots: false,
+        nav:true,
+        navText: navText,
+        margin: 15,
+        responsive: {
+            500: {
+                items: 2
+            },
+            1280: {
+                items: 4
+            },
+            1600: {
+                items: 6
+            }
+        }
+    })
+})
